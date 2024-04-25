@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-deployment
+  labels:
+    app: ubuntu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu
+  template:
+    metadata:
+      labels:
+        app: ubuntu
+    spec:
+      containers:
+      - name: ubuntu
+        image: packiarajd/idpa:ssh-server
+        ports:
+        - containerPort: 22
+        volumeMounts:
+          - name: ubuntu-home
+            mountPath: /home/packiarajd
+          - name: ubuntu-data
+            mountPath: /mnt
+      volumes:
+        - name: ubuntu-home
+          nfs:
+            server: vdc.idp.local
+            path: /devops/home/packiarajd
+        - name: ubuntu-data
+          nfs:
+            server: vdc.idp.local
+            path: /devops/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ubuntu-service
+spec:
+  selector:
+    app: ubuntu
+  ports:
+    - port: 22
+      targetPort: 22
+      nodePort: 30022
+  type: NodePort

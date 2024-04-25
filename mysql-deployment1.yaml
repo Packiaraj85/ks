@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-mysql
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+      nodePort: 30040
+  selector:
+    app: wordpress
+    tier: mysql
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mysql
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: Akhil@123
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: nginx-sql
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: nginx-sql
+        persistentVolumeClaim:
+          claimName: pvc-nfs
