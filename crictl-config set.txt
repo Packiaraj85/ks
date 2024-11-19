@@ -1,0 +1,12 @@
+sudo crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock --set image-endpoint=unix:///run/containerd/containerd.sock --set debug:true --set timeout:2
+
+runtime-endpoint: unix:///run/containerd/containerd.sock
+image-endpoint: unix:///run/containerd/containerd.sock
+timeout: 2
+debug: true
+pull-image-on-create: false
+disable-pull-on-run: false
+
+network:
+  version: 2
+  renderer: NetworkManager

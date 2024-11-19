@@ -1,0 +1,119 @@
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg lsb-release
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+cat /dev/null
+ls
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+docker info
+echo $USER
+cat /etc/group
+sudo usermod -aG docker $USER
+docker info
+
+apt install conntrack containerd nfs-client socat 
+name          | sudo | curl | openssl | ebtables | socat | ipset | ipvsadm | conntrack | chrony | docker | containerd | nfs client | ceph client | glusterfs client
+
+sudo apt install curl openssl ebtables socat ipset ipvsadm conntrack chrony containerd nfs-client
+
+
+curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.10 sh -
+
+
+Use "kk create [command] --help" for more information about a command.
+akhildharan@dc3:~$ kk create config --help
+Create cluster configuration file
+
+Usage:
+  kk create config [flags]
+
+Flags:
+      --debug                    Print detailed information
+  -f, --filename string          Specify a configuration file path
+      --from-cluster             Create a configuration based on existing cluster
+  -h, --help                     help for config
+      --ignore-err               Ignore the error message, remove the host which reported error and force to continue
+      --kubeconfig string        Specify a kubeconfig file
+      --name string              Specify a name of cluster object (default "sample")
+      --namespace string         KubeKey namespace to use (default "kubekey-system")
+      --with-kubernetes string   Specify a supported version of kubernetes
+      --with-kubesphere          Deploy a specific version of kubesphere (default v3.3.2)
+  -y, --yes                      Skip confirm check
+akhildharan@dc3:~$ kk create cluster --help
+Create a Kubernetes or KubeSphere cluster
+
+Usage:
+  kk create cluster [flags]
+
+Flags:
+  -a, --artifact string             Path to a KubeKey artifact
+      --container-manager string    Container runtime: docker, crio, containerd and isula. (default "docker")
+      --debug                       Print detailed information
+      --download-cmd string         The user defined command to download the necessary binary files. The first param '%s' is output path, the second param '%s', is the URL (default "curl -L -o %s %s")
+  -f, --filename string             Path to a configuration file
+  -h, --help                        help for cluster
+      --ignore-err                  Ignore the error message, remove the host which reported error and force to continue
+      --namespace string            KubeKey namespace to use (default "kubekey-system")
+      --skip-pull-images            Skip pre pull images
+      --skip-push-images            Skip pre push images
+      --with-kubernetes string      Specify a supported version of kubernetes
+      --with-kubesphere             Deploy a specific version of kubesphere (default v3.3.2)
+      --with-local-storage          Deploy a local PV provisioner
+      --with-packages               install operation system packages by artifact
+      --with-security-enhancement   Security enhancement
+  -y, --yes                         Skip confirm check
+akhildharan@dc3:~$
+
+
+kk --with-kubernetes v1.28.0 --with-kubesphere --container-manager containerd
+
+sudo kk create cluster -f config-sample.yaml --with-kubesphere v3.4.1 --container-manager containerd
+
+sudo kk create cluster -f config-sample.yaml --with-kubesphere v3.4.1 --container-manager containerd
+
+sudo kk create cluster -f config-sample.yaml --with-kubesphere v3.4.1 --container-manager containerd
+
+sudo kk add nodes -f config-sample.yaml
+sudo kk delete node dc2.idp.local -f config-sample.yaml
+
+#####################################################
+###              Welcome to KubeSphere!           ###
+#####################################################
+
+Console: http://192.168.0.103:30880
+Account: admin
+Password: P@88w0rd
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of control-plane nodes by copying certificate authorities
+and service account keys on each node and then running the following as root:
+
+  kubeadm join lb.kubesphere.local:6443 --token lxfty4.2vzf5jjiotn3j7q8 \
+        --discovery-token-ca-cert-hash sha256:1f13864039b058099998037d0a4a05e1bdf0bafb1aea65f51a5369658234f144 \
+        --control-plane
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join lb.kubesphere.local:6443 --token lxfty4.2vzf5jjiotn3j7q8 \
+        --discovery-token-ca-cert-hash sha256:1f13864039b058099998037d0a4a05e1bdf0bafb1aea65f51a5369658234f144
+
+
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f

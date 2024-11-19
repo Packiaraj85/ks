@@ -1,0 +1,45 @@
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of control-plane nodes by copying certificate authorities
+and service account keys on each node and then running the following as root:
+
+  kubeadm join dc3.idp.local:6443 --token chmfrh.1dpgdoclpe1nm166 \
+        --discovery-token-ca-cert-hash sha256:ff2c3bcde6311691d64f7194e6a454727babdebaf1e72d1db7131b8af376933f \
+        --control-plane
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+
+sudo kubeadm join dc3.idp.local:6443 --token chmfrh.1dpgdoclpe1nm166 --discovery-token-ca-cert-hash sha256:ff2c3bcde6311691d64f7194e6a454727babdebaf1e72d1db7131b8af376933f
+
+sudo swapoff -a
+free -h
+sudo vi /etc/fstab #/swap fs excluded
+
+sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+sudo apt-get update && sudo apt-get install -y kubelet=1.20.0-00 kubeadm=1.20.0-00 kubectl=1.20.0-00
+sudo systemctl start docker && sudo systemctl enable docker
+
+sudo kubeadm init --apiserver-advertise-address 192.168.0.108 --pod-network-cidr=172.16.0.0/16
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+kubectl get nodes
+history
