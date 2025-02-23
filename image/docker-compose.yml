@@ -1,0 +1,13 @@
+version: '3.9'  # Compose file format version
+services:
+  web:  # Web server service
+    image: nginx:latest
+    ports:
+      - "8080:80"  # Expose container's port 80 to host's port 8080
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html  # Mount local HTML to NGINX container
+
+  cache:  # Redis service
+    image: redis:alpine
+    ports:
+      - "6379:6379"  # Expose Redis port
